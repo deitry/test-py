@@ -10,7 +10,7 @@ import main
 
 
 class Test_Main(unittest.TestCase):
-    """ Класс для тестирования """
+    """ Тестирующий класс """
 
     def testSum(self):
         """ Тестирование суммирования """
