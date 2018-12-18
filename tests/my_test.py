@@ -6,7 +6,7 @@
 Обрати внимание, что test2.py файлом теста уже не считается
 
 https://code.visualstudio.com/docs/python/unit-testing - настройка в vscode
-https://habr.com/post/269759/ - статья про pytest
+https://habr.com/post/269759/ - шикарная статья про pytest
 """
 
 import pytest
@@ -77,6 +77,8 @@ def test_myClassMockLongUse():
     assert (obj.longUse() == MAX_OPERATIONS)
 
 class TestUM:
+    "Класс, объединяющий несколько тестирующих функций"
+
     def setup(self):
         """ Аналогично свободной setup(), выполняется перед каждым методом """
         print ("basic setup into class")
@@ -101,9 +103,15 @@ class TestUM:
         """ Аналогично свободному teardown_function(), выполняется после каждого метода """
         print ("method teardown")
 
-    def test_numbers_5_6(self):
+    @pytest.mark.xfail() # тест может не сработать и это нормально
+    @pytest.mark.parametrize(("x", "y"), [
+        (1, 6),
+        pytest.param(2, 12, marks=pytest.mark.critical_test),
+        (2, 13)])
+    # @pytest.mark.parametrize("y", [6, 12])
+    def test_numbers_5_6(self, x, y):
         print "test 5*6"
-        assert 5*6 == 30
+        assert x*6 == y
 
     def test_strings_b_2(self):
         print "test b*2"
@@ -121,6 +129,7 @@ def resource_setup(request):
 def test_1_that_needs_resource(resource_setup):
     print("test_1_that_needs_resource")
 
+@pytest.mark.critical_test
 def test_2_that_does_not():
     print("test_2_that_does_not")
 
